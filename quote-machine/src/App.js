@@ -8,6 +8,7 @@ import Hoc from './Hoc'
 function App() {
   const [counter, setCounter] = useState(110)
   const [input, setInput] = useState ("")
+  const [errorMessage, setErrorMessage] = useState('')
 
   let Quotes = [
     "The greatest glory in living lies not in never falling but in rising every time we fall. - Nelson Mandela",
@@ -122,18 +123,22 @@ function App() {
 
 ]
 
+const [quotes, setQuotes] = useState(Quotes)
   
 const handleChange = (e) =>{
   setInput(e.target.value);
-};
-
-if(input.length > 0){
-   Quotes = Quotes.filter((i) =>{
+  let matchingQuotes = Quotes.filter((i) =>{
     return  i.toLowerCase().match(input.toLowerCase())
-    
    })
-}
-
+   if (!matchingQuotes.length) {
+    setQuotes([])
+    setErrorMessage('No quotes found')
+    return
+  }
+  setErrorMessage('')
+  setQuotes(matchingQuotes)
+  
+};
 
 
   return (
@@ -159,7 +164,7 @@ if(input.length > 0){
           >
             <div className="row">
                 <div className="col s10 offset-s1">
-                   <h4> {Quotes[counter% Quotes.length]}</h4>
+                   <h4> {errorMessage.length > 0 ? errorMessage : quotes[counter% Quotes.length]}</h4>
                 </div>
             </div>
            
